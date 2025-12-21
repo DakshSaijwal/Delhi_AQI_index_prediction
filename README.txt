@@ -1,247 +1,231 @@
-🌫️ Delhi AQI Index Prediction
+# 🌫️ Delhi AQI Index Prediction  
+### 🧠 Spatio-Temporal Air Quality Forecasting using Machine Learning
 
-Spatio-Temporal Air Quality Forecasting using Machine Learning
+> 📍 A research-grade, leakage-safe spatio-temporal forecasting pipeline for predicting major air pollutants across Delhi using tree-based machine learning models.
 
-📌 Project Overview
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Air quality monitoring data suffers from severe missingness, spatial sparsity, and strong temporal dependencies.
-This project builds an end-to-end machine learning pipeline to predict major air pollutants in Delhi by combining:
+## 🔍 Why This Project?
 
-Hybrid data imputation (temporal + spatial)
+Air quality data is hard — not because of models, but because of **data reality**:
+
+- ❌ Severe missingness
+- 📍 Sparse spatial coverage
+- ⏱️ Strong temporal dependencies
 
-Time-aware feature engineering
+This project tackles **all three simultaneously**, end-to-end, with methodological rigor.
 
-Robust model validation
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-City-wide spatial visualization (heatmaps)
+## 🧩 Key Capabilities
 
-Two tree-based models — XGBoost and LightGBM — are trained and compared across six pollutants.
+- ✅ Hybrid **temporal + spatial imputation**
+- ✅ Leakage-safe **time-aware validation**
+- ✅ Per-pollutant forecasting (6 pollutants)
+- ✅ City-wide **7-day hourly AQI heatmaps**
+- ✅ XGBoost vs LightGBM comparison
+- ✅ Interpretability via feature importance & time-series plots
 
-🧠 Key Contributions
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Hybrid Imputation Strategy
+## 🗂️ Dataset Snapshot
 
-Short gaps: Linear interpolation
+📍 **Location**: Delhi, India  
+🏭 **Stations**: 40 monitoring stations  
+⏳ **Time Span**: 2009 – 2023  
+⏱️ **Resolution**: Hourly  
 
-Medium gaps: Kalman smoothing
+### 🌬️ Pollutants Modeled
+- PM2.5
+- PM10
+- NOx
+- SO₂
+- CO
+- O₃
 
-Long gaps: Spatial IDW using tuned power parameters
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Spatio-Temporal Modeling
+## 🧠 Core Modules Overview
+------------------------------------------------------------------------
+| Module                 Description                                   |
+|----------------------------------------------------------------------|
+| 🧩 Data Ingestion     | Validates raw AQI data and station metadata  |
+| 🛠️ Gap Analysis       | Classifies missing segments by duration      |
+| 🧪 IDW Tuning         | Cross-validates IDW power per pollutant      |
+| 🔄 Imputation Engine  | Hybrid temporal + spatial gap filling        |
+| 🧮 Feature Engineering| Time, lag, rolling, and spatial features     |
+| 🤖 Model Training     | XGBoost & LightGBM per pollutant             |
+| 📊 Evaluation         | Leakage-safe temporal validation             |
+| 🌍 Visualization      | City-wide heatmaps & station time-series     |
+------------------------------------------------------------------------
 
-Per-station time series combined with geographic coordinates
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Lag and rolling-window features
+## 🔧 End-to-End Pipeline
 
-Leakage-Safe Evaluation
+                                                              Raw AQI Data
+                                                                   ↓
+                                                        IDW Power Cross-Validation
+                                                                   ↓
+                                                  Hybrid Imputation (Temporal + Spatial)
+                                                                   ↓
+                                                        Coverage-Based Trimming
+                                                                   ↓
+                                                          Feature Engineering
+                                                                   ↓
+                                                   Model Training (XGBoost / LightGBM)
+                                                                   ↓
+                                                       Evaluation & Visualization
 
-Time-based train–test split (Expanding-Window/Single-Shot Forecast)
 
-No future information used in training
 
-Per-Pollutant Modeling
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Separate models for PM2.5, PM10, NOx, SO₂, CO, and O₃
+## 🧩 Hybrid Imputation Strategy
 
-City-Scale Visualization
+Missing values are handled **per pollutant, per station**, based on gap length:
+--------------------------------------
+| Gap Length | Method                 |
+|------------|------------------------|
+| ≤ 6 hours  | Linear interpolation   |
+| ≤ 72 hours | Kalman smoothing       |
+| > 72 hours | Spatial IDW            |
+--------------------------------------
 
-7-day hourly heatmaps using spatial interpolation
+🌐 Long gaps are reconstructed using **Inverse Distance Weighting (IDW)** from neighboring stations.
 
-🗂️ Dataset Description
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Stations: 40 monitoring stations across Delhi
+## 🔍 IDW Power Optimization
 
-Time span: 2009 – 2023 (hourly data)
+IDW power parameter **p ∈ [0.2, 2.0]** tuned using cross-validated RMSE.
+-------------------------
+| Pollutant | Optimal p |
+|-----------|-----------|
+| PM2.5     |    0.20   |
+| PM10      |    0.20   |
+| NOx       |    0.20   |
+| SO₂       |    0.20   |
+| CO        |    0.29   |
+| O₃        |    0.46   |
+-------------------------
 
-Pollutants:
+📌 Low values indicate strong regional spatial coherence.
 
-PM2.5
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-PM10
+## 🛠️ Feature Engineering
 
-NOx
+### ⏱️ Temporal Features
+- Hour of day
+- Day of week
+- Month
+- Season
 
-SO₂
+### 🔁 Lag & Rolling Features
+- Lags: 1h, 24h, 48h, 72h
+- Rolling means: 24h, 72h
 
-CO
+### 🌍 Spatial Features
+- Latitude
+- Longitude
+- Station ID (categorical)
 
-O₃
+📊 **Final Dataset**
+- ~1.75 million rows  
+- 42 engineered features  
 
-Raw data structure:
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-DL.data → station-wise time series
+## 🤖 Model Training
 
-DL.details → station coordinates
+### 🧠 Models Used
+- XGBoost
+- LightGBM
 
-locs.pred → spatial prediction grid
+### 🧪 Validation Strategy
+- Last **60 days** used as test set
+- Training data strictly precedes test data
+- Zero temporal leakage
 
-⚙️ Project Pipeline
+This mirrors **real-world forecasting**, not offline curve fitting.
 
-Raw AQI Data
-        ↓
-IDW p-value Cross-Validation
-        ↓
-Hybrid Imputation (Temporal + Spatial)
-        ↓
-Coverage-Based Trimming
-        ↓
-Feature Engineering
-        ↓
-Model Training (XGBoost / LightGBM)
-        ↓
-Evaluation & Visualization
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-🧩 Hybrid Imputation Strategy
+## 📊 Model Performance (LightGBM)
 
-Missing data is classified per pollutant per station:
+----------------------------
+|Pollutant|  RMSE |  MAE   |
+|---------|-------|--------|
+| PM2.5   | 22.07 |  13.15 |
+| PM10    | 39.84 |  25.34 |
+| NOx     | 22.66 |  11.81 |
+| SO₂     | 3.66  |  1.87  |
+| CO      | 0.43  |  0.20  |
+| O₃      | 8.73  |  4.72  |
+----------------------------
 
-Gap Length	Method Used
-≤ 6 hours	Linear interpolation
-≤ 72 hours	Kalman smoothing
-> 72 hours	Spatial IDW
-For long gaps, Inverse Distance Weighting (IDW) is applied using neighboring stations, with the power parameter p optimized separately for each pollutant.
+🏆 LightGBM consistently outperformed XGBoost.
 
-🔍 IDW Power Optimization
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-For each pollutant, IDW power p ∈ [0.2, 2.0] was selected using cross-validated RMSE over recent historical data.
+## 📈 Model Interpretation
 
-Pollutant	Best p
-PM2.5    	0.20
-PM10    	0.20
-NOx		0.20
-SO₂	     			0.20
-CO		0.29
-O₃      		0.46
+Key insights from feature importance analysis:
 
-🛠 Feature Engineering
+- 🧠 Lagged pollutant values dominate predictions
+- 🌞 Strong diurnal and seasonal cycles
+- 📍 Spatial features distinguish station behavior
 
-Temporal Features
+📂 Stored in:
 
-Hour of day
+results/feature_importance/
 
-Day of week
 
-Month
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Season
+## 🌍 Spatial Forecasting & Heatmaps
 
-Lag & Rolling Features
+- 🕒 Hourly forecasts for **7 days**
+- 🗺️ City-wide interpolation using IDW
+- 🌫️ High-resolution AQI heatmaps
 
-Lag 1h, 24h, 48h, 72h
+📂 Available in:
 
-Rolling means (24h, 72h)
+results/heatmaps/
 
-Spatial Features
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Latitude
+## 🧪 Time-Series Validation
 
-Longitude
+Station-level validation confirms temporal consistency:
 
-Station ID (categorical)
+- 📉 Actual vs predicted plots
+- 🏭 Example stations: **Station 5**, **Station 33**
 
-Final feature table:
+📂 Available in:
 
-~1.75 million rows
+results/accuracy_plots/
 
-42 features
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-🤖 Model Training
+results/accuracy_plots/
 
-Two models were trained per pollutant:
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Models Used
+## 🎯 Intended Audience
 
-XGBoost
+- 📊 Machine Learning / Data Science interns
+- 🧠 Research-focused forecasting roles
+- 🌍 Environmental data science applications
+- ⏱️ Spatio-temporal modeling practitioners
 
-LightGBM
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Validation Strategy
+## 🚀 Final Note
 
-Last 60 days used as test set
+This project prioritizes **methodological correctness, leakage prevention, and real-world reliability** over shortcuts and leaderboard metrics.
 
-All training data strictly precedes test data
+                                                                  Keep Learning Keep Growing
+________________________________________________________________________________________________________________________________________________________________________
 
-Prevents temporal leakage
-
-📊 Model Performance
-LightGBM Results (RMSE / MAE)
-Pollutant	RMSE	MAE
-PM2.5		22.07	13.15
-PM10		39.84	25.34
-NOx		22.66	11.81
-SO₂					3.66	  1.87
-CO		0.43	 0.20
-O₃					8.73	  4.72
-
-LightGBM consistently performed slightly better than XGBoost.
-
-📈 Model Interpretation
-
-Feature importance analysis shows:
-
-Lagged pollutant values dominate predictions
-
-Strong daily and seasonal patterns
-
-Spatial coordinates help distinguish station behavior
-
-Feature importance plots available in results/feature_importance/
-
-🌍 Heatmap Visualization
-
-For each pollutant:
-
-Hourly predictions for 7 days
-
-Interpolated to a spatial grid using IDW
-
-Heatmaps available in results/heatmaps/
-
-🧪 Time-Series Validation
-
-For selected stations (e.g., Station 5 and Station 33):
-
-Actual vs predicted pollutant concentrations plotted
-
-Confirms temporal consistency and trend capture
-
-Available in results/time_series/
-
-🗃️ Repository Structure
-
-Delhi_AQI_index_prediction/
-│
-├── data/
-│   ├── raw/
-│   ├── analysis/
-│   ├── cleaned/
-│   ├── interim/
-│   └── processed/
-│
-├── src/
-│   ├── 00_load_and_validate.py
-│   ├── 01_gap_analysis.py
-│   ├── 01_idw_p_cross_validation.py
-│   ├── 02_imputation.py
-│   ├── 02b_validate_imputation.py
-│   ├── 02c_trim_low_coverage.py
-│   ├── 03_feature_engineering.py
-│   ├── 04a_train_xgboost.py
-│   ├── 04b_train_lightgbm.py
-│   ├── 04c_feature_importance.py
-│   ├── 04d_Igb_feature_importance.py
-│   ├── 04e_export_lightgbm_predictions.py
-│   ├── 05_error_regime_analysis.py
-│   ├── 05_forecasting.py
-│   ├── 05_generate_7day_heatmaps.py
-│   └── 06_accuracy_timeseries.py
-│
-├── models/
-│   ├── xgboost/
-│   └── lightgbm/
-│
-├── results/
-│   ├── heatmaps/
-│   └── accuracy_plots/
-│
-└── README.md
