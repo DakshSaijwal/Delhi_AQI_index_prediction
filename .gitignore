@@ -1,0 +1,17 @@
+# Data
+data/
+*.csv
+*.RData
+
+# Models & outputs
+models/
+outputs/
+
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# OS
+.DS_Store
+Thumbs.db
