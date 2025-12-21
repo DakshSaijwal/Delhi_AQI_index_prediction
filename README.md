@@ -1,12 +1,12 @@
 #  **Delhi AQI Index Prediction**  <img src="https://media.giphy.com/media/v1.Y2lkPWVjZjA1ZTQ3OXBwdXd2d2hhcXhlYTVicWluNGJwdjRjM3VmaXhlbWZzZ3ViMDV6NiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/4OsipXfG7K6kLgKBJd/giphy.gif" width="40"/>
 
-### 🧠 Spatio-Temporal Air Quality Forecasting using Machine Learning
+### 🧠 **Spatio-Temporal Air Quality Forecasting using Machine Learning**
 
-> 📍 A research-grade, leakage-safe spatio-temporal forecasting pipeline for predicting major air pollutants across Delhi using tree-based machine learning models.
+> *📍 A research-grade, leakage-safe spatio-temporal forecasting pipeline for predicting major air pollutants across Delhi using tree-based machine learning models.*
 
 ---
 
-## Why This Project? <img src="https://i.gifer.com/74pZ.gif" width="40">  
+## **Why This Project?** <img src="https://i.gifer.com/74pZ.gif" width="40">  
 Air quality data is hard — not because of models, but because of **data reality**:
 
 - ❌ Severe missingness
@@ -17,8 +17,7 @@ This project tackles **all three simultaneously**, end-to-end, with methodologic
 
 ---
 
-## <span style="display:inline-flex; align-items:center;"> Key Capabilities <img src="https://i.gifer.com/4q43.gif" width="28" style="margin-left:-6px; transform: translateY(3px);">
-</span> ## 
+## **Key Capabilities** <img src="https://i.gifer.com/4q43.gif" width="48">   
 
 
 - ✅ Hybrid **temporal + spatial imputation**
@@ -30,14 +29,14 @@ This project tackles **all three simultaneously**, end-to-end, with methodologic
 
 ---
 
-## 🗂️ Dataset Snapshot
+## 🗂️ **Dataset Snapshot**
 
 📍 **Location**: Delhi, India  
 🏭 **Stations**: 40 monitoring stations  
 ⏳ **Time Span**: 2009 – 2023  
 ⏱️ **Resolution**: Hourly  
 
-### 🌬️ Pollutants Modeled
+### 🌬️ **Pollutants Modeled**
 - PM2.5
 - PM10
 - NOx
@@ -47,7 +46,7 @@ This project tackles **all three simultaneously**, end-to-end, with methodologic
 
 ---
 
-## 🧠 Core Modules Overview
+## 🧠 **Core Modules Overview**
 
 | Module | Description |
 |------|------------|
@@ -62,7 +61,7 @@ This project tackles **all three simultaneously**, end-to-end, with methodologic
 
 ---
 
-## 🔧 End-to-End Pipeline
+## 🔧 **End-to-End Pipeline**
 
 ```mermaid
 flowchart TD
@@ -78,7 +77,7 @@ flowchart TD
 ```
 ---
 
-## 🧩 Hybrid Imputation Strategy
+## 🧩 **Hybrid Imputation Strategy**
 
 Missing values are handled **per pollutant, per station**, based on gap length:
 
@@ -88,11 +87,11 @@ Missing values are handled **per pollutant, per station**, based on gap length:
 | ≤ 72 hours | Kalman smoothing |
 | > 72 hours | Spatial IDW |
 
-🌐 Long gaps are reconstructed using **Inverse Distance Weighting (IDW)** from neighboring stations.
+🌐**Long gaps are reconstructed using **Inverse Distance Weighting (IDW)** from neighboring stations.**
 
 ---
 
-## 🔍 IDW Power Optimization
+## 🔍 **IDW Power Optimization**
 
 IDW power parameter **p ∈ [0.2, 2.0]** tuned using cross-validated RMSE.
 
@@ -105,23 +104,23 @@ IDW power parameter **p ∈ [0.2, 2.0]** tuned using cross-validated RMSE.
 | CO | 0.29 |
 | O₃ | 0.46 |
 
-📌 Low values indicate strong regional spatial coherence.
+📌 **Low values indicate strong regional spatial coherence.**
 
 ---
 
-## 🛠️ Feature Engineering
+## 🛠️ **Feature Engineering**
 
-### ⏱️ Temporal Features
+### ⏱️ **Temporal Features**
 - Hour of day
 - Day of week
 - Month
 - Season
 
-### 🔁 Lag & Rolling Features
+### 🔁 **Lag & Rolling Features**
 - Lags: 1h, 24h, 48h, 72h
 - Rolling means: 24h, 72h
 
-### 🌍 Spatial Features
+### 🌍 **Spatial Features**
 - Latitude
 - Longitude
 - Station ID (categorical)
@@ -132,13 +131,13 @@ IDW power parameter **p ∈ [0.2, 2.0]** tuned using cross-validated RMSE.
 
 ---
 
-## 🤖 Model Training
+## 🤖 **Model Training**
 
-### 🧠 Models Used
-- XGBoost
-- LightGBM
+### 🧠 **Models Used**
+*- XGBoost*
+*- LightGBM*
 
-### 🧪 Validation Strategy
+### 🧪 **Validation Strategy**
 - Last **60 days** used as test set
 - Training data strictly precedes test data
 - Zero temporal leakage
@@ -147,7 +146,7 @@ This mirrors **real-world forecasting**, not offline curve fitting.
 
 ---
 
-## 📊 Model Performance (LightGBM)
+## 📊 **Model Performance (LightGBM)**
 
 | Pollutant | RMSE | MAE |
 |---------|------|-----|
@@ -158,11 +157,11 @@ This mirrors **real-world forecasting**, not offline curve fitting.
 | CO | 0.43 | 0.20 |
 | O₃ | 8.73 | 4.72 |
 
-🏆 LightGBM consistently outperformed XGBoost.
+🏆 **LightGBM consistently outperformed XGBoost slightly.**
 
 ---
 
-## 📈 Model Interpretation
+## 📈 **Model Interpretation**
 
 Key insights from feature importance analysis:
 
@@ -171,42 +170,33 @@ Key insights from feature importance analysis:
 - 📍 Spatial features distinguish station behavior
 
 📂 Stored in:
->results/feature_importance/
+>*results/feature_importance/*
 
 ---
 
-## 🌍 Spatial Forecasting & Heatmaps
+## 🌍 **Spatial Forecasting & Heatmaps**
 
 - 🕒 Hourly forecasts for **7 days**
 - 🗺️ City-wide interpolation using IDW
 - 🌫️ High-resolution AQI heatmaps
 
 📂 Available in:
->results/heatmaps/
+>*results/heatmaps/*
 
 ---
 
-## 🧪 Time-Series Validation
+## 🧪 **Time-Series Validation**
 
 Station-level validation confirms temporal consistency:
 
-- 📉 Actual vs predicted plots
+- 📉 **Actual vs predicted plots**
 - 🏭 Example stations: **Station 5**, **Station 33**
 
 📂 Available in:
->results/accuracy_plots/
+>*results/accuracy_plots/*
 
 ---
 
-## 🎯 Intended Audience
-
-- 📊 Machine Learning / Data Science interns
-- 🧠 Research-focused forecasting roles
-- 🌍 Environmental data science applications
-- ⏱️ Spatio-temporal modeling practitioners
-
----
-
-## 🚀 Final Note
+## 🚀 **Final Note**
 
 This project prioritizes **methodological correctness, leakage prevention, and real-world reliability** over shortcuts and leaderboard metrics.
